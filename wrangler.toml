@@ -1,0 +1,7 @@
+name = "aka"
+main = "src/index.ts"
+compatibility_date = "2023-12-06"
+env = { }
+
+[triggers]
+crons = [ ]
