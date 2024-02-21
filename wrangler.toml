@@ -1,7 +1,12 @@
 name = "aka"
-main = "src/index.ts"
+main = "Source/index.ts"
 compatibility_date = "2023-12-06"
 env = { }
+rules = [
+  { type = "Data", globs = ["./HTML/*.*"], fallthrough = false }
+]
 
-[triggers]
-crons = [ ]
+[[d1_databases]]
+binding = "DB"
+database_name = "aka"
+database_id = "b81d057c-4624-43fb-ae9e-c58e8d831170"
