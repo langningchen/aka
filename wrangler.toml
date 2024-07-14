@@ -1,0 +1,10 @@
+name = "aka"
+main = "Source/index.ts"
+compatibility_date = "2024-07-01"
+
+[placement]
+mode = "smart"
+
+[[kv_namespaces]]
+binding = "aka"
+id = "f3c4f72d104f417a8b1dcbb2c0eba9af"
