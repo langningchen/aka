@@ -29,9 +29,10 @@ export default {
 				return new Response("NotAValidURL");
 			}
 			const ID: Number = Number(await env.aka.get("Size")) + 1;
-			await env.aka.put(ID, URLData);
 			await env.aka.put("Size", ID);
-			return new Response(ID.toString(36));
+			const IDString: string = ID.toString(36);
+			await env.aka.put(IDString, URLData);
+			return new Response(IDString);
 		}
 		if (request.method == "GET") {
 			const IDString: string = new URL(request.url).pathname.substring(1);
@@ -56,9 +57,7 @@ ButtonElement.addEventListener("click", async () => {
 					},
 				});
 			}
-			const ID = parseInt(IDString, 36);
-			if (isNaN(ID)) { return new Response("Invalid data"); }
-			const URLData = await env.aka.get(ID);
+			const URLData = await env.aka.get(IDString);
 			if (URLData == undefined) { return new Response("Not found"); }
 			return new Response("Redirecting you to \"" + URLData + "\". If it does not redirect automatically, enter the address manually.", {
 				headers: {
