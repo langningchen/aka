@@ -23,6 +23,11 @@ export default {
 				await env.aka.put("Size", 0);
 			}
 			const URLData: string = await request.text();
+			try {
+				new URL(URLData);
+			} catch {
+				return new Response("NotAValidURL");
+			}
 			const ID: Number = Number(await env.aka.get("Size")) + 1;
 			await env.aka.put(ID, URLData);
 			await env.aka.put("Size", ID);
