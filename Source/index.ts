@@ -53,7 +53,7 @@ ButtonElement.addEventListener("click", async () => {
 			}
 			const ID = parseInt(IDString, 36);
 			if (isNaN(ID)) { return new Response("Invalid data"); }
-			const URLData = await env.aka.get(IDString);
+			const URLData = await env.aka.get(ID);
 			if (URLData == undefined) { return new Response("Not found"); }
 			return new Response("Redirecting you to \"" + URLData + "\". If it does not redirect automatically, enter the address manually.", {
 				headers: {
