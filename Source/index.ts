@@ -19,39 +19,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 export default {
 	async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
 		if (request.method == "POST") {
-			if (await env.aka.get("Size") === null) {
-				await env.aka.put("Size", 0);
-			}
-			const URLData: string = await request.text();
+			const RequestData: string = await request.text();
 			try {
+				var { Key: KeyData, URL: URLData } = JSON.parse(RequestData);	
 				new URL(URLData);
 			} catch {
-				return new Response("NotAValidURL");
+				return new Response("Invalid request");
 			}
-			const ID: Number = Number(await env.aka.get("Size")) + 1;
-			await env.aka.put("Size", ID);
-			const IDString: string = ID.toString(36);
-			await env.aka.put(IDString, URLData);
-			return new Response(IDString);
+			await env.aka.put(KeyData, URLData);
+			return new Response("Success");
 		}
 		if (request.method == "GET") {
 			const IDString: string = new URL(request.url).pathname.substring(1);
 			if (IDString == "") {
-				return new Response(`<input type="url"><button>submit</button><pre></pre><script>
-const InputElement = document.getElementsByTagName("input")[0];
+				return new Response(`<input placeholder="key" id="key"><br>
+<input placeholder="value" type="url" id="url"><br>
+<button>submit</button>
+<pre></pre>
+<script>
+const KeyElement = document.getElementById("key");
+const URLElement = document.getElementById("url");
 const ButtonElement = document.getElementsByTagName("button")[0];
 const PreElement = document.getElementsByTagName("pre")[0];
-PreElement.innerText += "This is a URL shorting service. Just submit the URL above and you will get the shortened URL in a few seconds! \\n\\n";
+PreElement.innerText += "This is a URL shorting service. Just input the key and the URL, and click the button.\\n\\n";
 ButtonElement.addEventListener("click", async () => {
-    PreElement.innerText += "Uploading URL\\n";
-	const ID = await fetch("/", {
-		body: InputElement.value,
+    PreElement.innerText += "Uploading\\n";
+	const Result = await fetch("/", {
+		body: JSON.stringify({
+			"Key": KeyElement.value,
+			"URL": URLElement.value,
+		}),
 		method: "POST",
 	}).then(r => r.text());
-	let Path = new URL(window.location); 
-	Path.pathname = "/" + ID;
-	PreElement.innerText += "Shortened URL: " + Path.toString() + "\\n\\n";
-});</script>`, {
+	PreElement.innerText += Result + "\\n\\n";
+});
+</script>`, {
 					headers: {
 						"Content-Type": "text/html",
 					},
