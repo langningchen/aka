@@ -16,12 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 **********************************************************************/
 
+import template from './index.html';
+
 export default {
 	async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
 		if (request.method == "POST") {
 			const RequestData: string = await request.text();
 			try {
-				var { Key: KeyData, URL: URLData } = JSON.parse(RequestData);	
+				var { Key: KeyData, URL: URLData } = JSON.parse(RequestData);
 				new URL(URLData);
 			} catch {
 				return new Response("Invalid request");
@@ -32,28 +34,7 @@ export default {
 		if (request.method == "GET") {
 			const IDString: string = new URL(request.url).pathname.substring(1);
 			if (IDString == "") {
-				return new Response(`<input placeholder="key" id="key"><br>
-<input placeholder="value" type="url" id="url"><br>
-<button>submit</button>
-<pre></pre>
-<script>
-const KeyElement = document.getElementById("key");
-const URLElement = document.getElementById("url");
-const ButtonElement = document.getElementsByTagName("button")[0];
-const PreElement = document.getElementsByTagName("pre")[0];
-PreElement.innerText += "This is a URL shorting service. Just input the key and the URL, and click the button.\\n\\n";
-ButtonElement.addEventListener("click", async () => {
-    PreElement.innerText += "Uploading\\n";
-	const Result = await fetch("/", {
-		body: JSON.stringify({
-			"Key": KeyElement.value,
-			"URL": URLElement.value,
-		}),
-		method: "POST",
-	}).then(r => r.text());
-	PreElement.innerText += Result + "\\n\\n";
-});
-</script>`, {
+				return new Response(template, {
 					headers: {
 						"Content-Type": "text/html",
 					},
