@@ -8,3 +8,6 @@ mode = "smart"
 [[kv_namespaces]]
 binding = "aka"
 id = "f3c4f72d104f417a8b1dcbb2c0eba9af"
+
+[observability.logs]
+enabled = true
