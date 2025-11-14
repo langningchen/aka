@@ -24,7 +24,9 @@ export default {
 			const RequestData: string = await request.text();
 			try {
 				var { Key: KeyData, URL: URLData } = JSON.parse(RequestData);
-				new URL(URLData);
+		        if (new URL(URLData).hostname == "aka.langningchen.com") {
+		          throw "Recursion";
+		        }
 			} catch {
 				return new Response("Invalid request");
 			}
